@@ -17,13 +17,13 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('telp');
+            $table->string('telp')->unique();
             $table->string('alamat', 100);
             $table->string('password');
             $table->string('type');
             $table->integer('id_owner');
             $table->text('activation_code');
-            $table->string('fcm_token', 255);
+            $table->string('fcm_token', 255)->nullable();
             $table->integer('trash');
             $table->string('paket_akun_id');
             $table->integer('jml_transaksi');
