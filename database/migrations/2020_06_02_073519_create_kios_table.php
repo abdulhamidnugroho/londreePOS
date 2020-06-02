@@ -19,15 +19,15 @@ class CreateKiosTable extends Migration
             $table->string('alamat');
             $table->string('no_telp');
             $table->integer('id_owner');
-            $table->text('latitude');
+            $table->text('latitude')->nullable();
             $table->integer('pesan_antar');
             $table->integer('trash');
-            $table->string('provinsi');
-            $table->text('logo');
-            $table->text('alamat_logo');
-            $table->text('ketentuan');
-            $table->text('estimasi');
-            $table->text('pesan_wa_sms');
+            $table->string('provinsi')->nullable();
+            $table->text('logo')->nullable();
+            $table->text('alamat_logo')->nullable();
+            $table->text('ketentuan')->nullable();
+            $table->text('estimasi')->nullable();
+            $table->text('pesan_wa_sms')->nullable();
             $table->timestamps();
         });
     }
