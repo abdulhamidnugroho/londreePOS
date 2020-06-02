@@ -2,10 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Kios;
 use App\Model;
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(Kios::class, function (Faker $faker) {
     return [
         'nama' => $faker->company,
         'alamat' => $faker->address,
