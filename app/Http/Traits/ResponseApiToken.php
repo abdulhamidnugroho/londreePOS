@@ -14,7 +14,19 @@ trait ResponseApiToken
     */
     protected function respondWithToken($token)
     {
-        $id = Auth::user()->id;
+        $id_owner = Auth::user()->id_owner;
+        $type = Auth::user()->type;
+        $id_kios = DB::table('operator_kios')->select('kios_id')->where('admin_id', $id_owner)->get();
+
+        if ($type == 'admin')
+        {
+            $user = DB::table('kios')->where('id_owner', $id_owner)->first();
+        }
+        else
+        {
+            $user = DB::table('kios')->where('id', $id_kios)->first();
+        }
+        
         return response()->json([
             'status' => true,
             'pesan' => 'success',
