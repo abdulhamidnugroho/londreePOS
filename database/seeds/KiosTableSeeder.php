@@ -11,6 +11,6 @@ class KiosTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Kios::class, 100)->create();
+        factory(App\Kios::class, 10)->create();
     }
 }
