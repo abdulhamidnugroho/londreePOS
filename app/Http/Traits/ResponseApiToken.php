@@ -23,9 +23,6 @@ trait ResponseApiToken
         if ($type == 'admin')
         {
             $user = DB::table('kios')->where('id_owner', $id_owner)->first();
-            // $orders = DB::table('orders')
-            //     ->whereRaw('price > IF(state = "TX", ?, 100)', [200])
-            //     ->get();
         }
         else
         {
