@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 
 $factory->define(OperatorKios::class, function (Faker $faker) {
     return [
-        'admin_id' => $faker->numberBetween($min = 1, $max = 100),
-        'kios_id' => $faker->numberBetween($min = 10, $max = 80)
+        'admin_id' => $faker->numberBetween($min = 30, $max = 100),
+        'kios_id' => $faker->numberBetween($min = 30, $max = 80)
     ];
 });

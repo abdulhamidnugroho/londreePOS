@@ -10,8 +10,8 @@ $factory->define(Kios::class, function (Faker $faker) {
     return [
         'nama' => $faker->company,
         'alamat' => $faker->address,
-        'no_telp' => $faker->unique()->randomNumber($nbDigits = 7),
-        'id_owner' => $faker->unique()->randomNumber($nbDigits = 3),
+        'no_telp' => $faker->unique()->randomNumber($nbDigits = 5),
+        'id_owner' => $faker->numberBetween($min = 30, $max = 100),
         'pesan_antar' => $faker->randomElement([1, 0]),
         'trash' => $faker->randomElement([1, 0]),
         'logo' => $faker->image(),
