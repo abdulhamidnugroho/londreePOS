@@ -16,17 +16,20 @@ class RegisterController extends Controller
      */
     public function store(RegisterRequest $request)
     {
+        // dd($request->all());
         try {
 
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'type' => $request->type,
+                'trash' => $request->trash,
             ]);
             $user->save();
 
         } catch (\Exception $exception) {
-            return response([
+            return response()->json([
                 'status' => 'error',
                 'message' => "Failed to register user, please try again. {$exception->getMessage()}"
             ], 500);

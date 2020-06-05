@@ -37,7 +37,7 @@ class BooksController extends Controller
             return new BookResource($book);
 
         } catch(\Exeception $exception) {
-            return response([
+            return response()->json([
                 'status' => 'error',
                 'message' => "Error: Book not created!, please try again. - {$exception->getMessage()}"
             ], 500);
