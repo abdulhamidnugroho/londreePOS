@@ -15,6 +15,10 @@ class CreateItemTransaksiTable extends Migration
     {
         Schema::create('item_transaksi', function (Blueprint $table) {
             $table->id();
+            $table->double('transaksi_id');
+            $table->integer('harga_layanan_id');
+            $table->decimal('kuantitas', 8, 2);
+            $table->integer('harga');
             $table->timestamps();
         });
     }

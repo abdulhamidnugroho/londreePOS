@@ -2,11 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Item_Transaksi;
 use App\Model;
-use App\Transaksi;
 use Faker\Generator as Faker;
 
-$factory->define(Transaksi::class, function (Faker $faker) {
+$factory->define(Item_Transaksi::class, function (Faker $faker) {
     return [
         //
     ];
