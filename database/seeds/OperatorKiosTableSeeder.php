@@ -11,6 +11,6 @@ class OperatorKiosTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\OperatorKios::class, 10)->create();
+        factory(App\OperatorKios::class, 50)->create();
     }
 }
