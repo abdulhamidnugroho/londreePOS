@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->integer('jml_kios')->nullable();
             $table->integer('pesan_antar')->nullable();
             $table->integer('saldo')->nullable();
-            $table->string('referral')->nullable();
+            $table->string('reveral')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
