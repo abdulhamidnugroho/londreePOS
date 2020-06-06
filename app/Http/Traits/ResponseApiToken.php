@@ -15,32 +15,38 @@ trait ResponseApiToken
     */
     protected function respondWithToken($token)
     {
+        $id = Auth::user()->id;
         $id_owner = Auth::user()->id_owner;
         $type = Auth::user()->type;
         $id_kios = DB::table('operator_kios')->where('admin_id', $id_owner)->value('kios_id');
-        // $user = [];
+        $data_user = DB::table('users')->where('id', $id )->first();
         
         if ($type == 'admin')
         {
-            $user = DB::table('kios')->where('id_owner', $id_owner)->first();
+            $kios = DB::table('kios')->where('id_owner', $id_owner)->first();
         }
         else
         {
-            $user = DB::table('kios')->where('id', $id_kios)->first();
+            $kios = DB::table('kios')->where('id', $id_kios)->first();
         }
+        
+        $data = [
+            'id_owner' => $id_owner,
+            'type' => $type,
+            'id_kios' => $id_kios,
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'kios' => $kios,
+            'jml_transaksi' => $data_user->jml_transaksi,
+            'paket_akun_id' => $data_user->paket_akun_id,
+            'pesan_antar' => $data_user->pesan_antar,
+        ];
         
         return response()->json([
             'status' => true,
             'pesan' => 'success',
-            'data' => [
-                'id_owner' => $id_owner,
-                'type' => $type,
-                'id_kios' => $id_kios,
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
-                'kios' => $user,
-            ]
+            'data' => $data
         ]);
     }
 }

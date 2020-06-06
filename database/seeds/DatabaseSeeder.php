@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         $this->call(KiosTableSeeder::class);
         $this->call(OperatorKiosTableSeeder::class);
-        $this->call(DiskonTableSeeder::class);
-        $this->call(DompetTableSeeder::class);
+        // $this->call(DiskonTableSeeder::class);
+        // $this->call(DompetTableSeeder::class);
     }
 }
