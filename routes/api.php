@@ -52,5 +52,4 @@ Route::group(['middleware' => 'jwt.auth'], function ($router) {
     Route::apiResource('books', 'Api\Books\BooksController');
     Route::apiResource('categories', 'Api\Categories\CategoriesController');
     Route::apiResource('transaksi', 'Api\Transaksi\TransaksiController');
-    Route::post('transaksi/order', 'Api\Transaksi\TransaksiController@store')->name('transaksi.order');
 });
