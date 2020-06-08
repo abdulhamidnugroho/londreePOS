@@ -37,7 +37,7 @@ class TransaksiController extends Controller
         {
             return $this->errorResponse('JSON Data Request dan Token tidak boleh kosong', 400);
         }
-
+        
         
 
     }

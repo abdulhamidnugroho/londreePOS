@@ -72,27 +72,62 @@ class Handler extends ExceptionHandler
                 ]
             ], JsonResponse::HTTP_PRECONDITION_FAILED);
         }
+        
+        if ($exception instanceof UnauthorizedHttpException) {
+            $preException = $exception->getPrevious();
+            if ($preException instanceof TokenExpiredException) {
+                return response()->json([
+                    'status' => false,
+                    'data' => null,
+                    'err_' => [
+                    'message' => 'Token Expired',
+                    'code' => 401
+                    ]
+                ]);
+            }
+            else if ($preException instanceof TokenInvalidException) {
+                return response()->json([
+                    'data' => null,
+                    'status' => false,
+                    'err_' => [
+                    'message' => 'Token Invalid',
+                    'code' => 401
+                    ]
+                ]);
+            }
+            else if ($preException instanceof TokenBlacklistedException) {
+                return response()->json([
+                    'data' => null,
+                    'status' => false,
+                    'err_' => [
+                    'message' => 'Token Blacklisted',
+                    'code' => 401
+                    ]
+                ]);
+            }
 
-        if ($request->isJson() && $exception instanceof UnauthorizedHttpException) {
-            $previous_exception = $exception->getPrevious();
-            switch ($previous_exception) {
-                case $previous_exception instanceof TokenExpiredException:
-                case $previous_exception instanceof TokenInvalidException:
-                case $previous_exception instanceof TokenBlacklistedException:
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => "{$exception->getMessage()}"
-                    ], JsonResponse::HTTP_UNAUTHORIZED);
-                    break;
-                default:
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => "{$exception->getMessage()}"
-                    ], JsonResponse::HTTP_UNAUTHORIZED);
-                    break;
+            if ($exception->getMessage() === 'Token not provided') {
+                return response()->json([
+                    'data' => null,
+                    'status' => false,
+                    'err_' => [
+                    'message' => 'Token not provided',
+                    'code' => 401
+                    ]
+                ]);
+            }
+            else if( $exception->getMessage() === 'User not found'){
+                return response()->json([
+                    'data' => null,
+                    'status' => false,
+                    'err_' => [
+                    'message' => 'User Not Found',
+                    'code' => 404
+                    ]
+                ]);
             }
         }
-        
+
         if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json([
                 'error' => 'Resource not found'
