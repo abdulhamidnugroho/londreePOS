@@ -80,7 +80,7 @@ class TransaksiController extends Controller
                             'jml_transaksi' => $finalCount							 
                         ]);
                         
-                        $total_harga = 1;
+                        $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
