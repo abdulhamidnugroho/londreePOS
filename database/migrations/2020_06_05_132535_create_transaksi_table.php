@@ -27,13 +27,13 @@ class CreateTransaksiTable extends Migration
             $table->integer('dp');
             $table->enum('jenis_pembayaran', ['TUNAI', 'DOMPET']);
             $table->enum('status', ['LUNAS', 'PIUTANG']);
-            $table->string('status_kerja');
+            $table->string('status_kerja')->default(1);
             $table->integer('status_order');
             $table->enum('status_pesanan', ['online', 'offline']);
             $table->string('estimasi_waktu');
             $table->float('diskon');
             $table->integer('bayar');
-            $table->integer('trash');
+            $table->integer('trash')->default(0);
             $table->text('note');
             $table->integer('jml_transaksi');
             $table->timestamps();

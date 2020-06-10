@@ -9,6 +9,7 @@ use App\Pelanggan;
 use App\Traits\ApiResponser;
 use App\Transaksi;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use DB;
 
@@ -36,79 +37,108 @@ class TransaksiController extends Controller
     {
         $data = json_decode($request->data);
 
+        $id = $request->id;
         $kios = DB::table('kios')->where('id', $data->id_kios)->value('id_owner');
         $total = $data->total - $data->diskon;
 
-        $count = DB::table('transaksi')
-                     ->select(DB::raw('count(id) as ids'))
-                     ->where('pelanggan_id', '=', $data->id_pelanggan)
-                     ->get();
+        $diskon = $data->total - $data->diskon;
 
-        if (!$data)
-        {
+        $count = Transaksi::where('pelanggan_id',$data->id_pelanggan)->count();
+        $finalCount = $count + 1;
+
+        if (!$data){
             return $this->errorResponse('JSON Data Request dan Token tidak boleh kosong', 400);
         }
 
-        // $id = ['id' => $data->id];
-
-        $pengerjaan = [
-            'pengerjaan_nota_id' => $data->pengerjaan_nota_id,
-            'pengerjaan_nota_nama' => $data->pengerjaan_nota_nama,
-        ];
-
-        /** 
-         * Init Request Data
-         * Without = [ 'pengerjaan_nota_id', 'pengerjaan_nota_nama', 'diskon']
-         *  
-         * */ 
-        
-        $dataInit = [
-            'owner_id' => $data->owner_id,
-            'pelanggan_id' => $data->id_pelanggan,
-            'status_order' => $data->status_order,
-            'tgl_transaksi' => date('Y-m-d H:i:s'),
-            'tgl_masuk_uang' => date('Y-m-d H:i:s'),
-            'tgl_diambil' => date('Y-m-d H:i:s'),
-            'total_harga' => 4124,
-            'dp' => $data->dp,
-            'bayar' => $data->dp,
-            'jenis_pembayaran' => $data->jenis_pembayaran,
-            'status' => $data->status,
-            'note' => $data->note,
-            'status_pesanan' => $data->status_pesanan,
-            'estimasi_waktu'=>  $data->estimasi_waktu,
-            'jml_transaksi' => $count
-        ];
-
-        // dd($dataInput);
-        
-
         try {
-            $trans = Transaksi::create([
-                'owner_id' => 4324234,
-                'pelanggan_id' => 4234234,
-                'kios_id' => 1209,
-                'pengerjaan_nota_id' => 20391,
-                'pengerjaan_nota_nama' => 'dsadasd',
-                'tgl_transaksi' => date('Y-m-d H:i:s'),
-                'tgl_masuk_uang' => date('Y-m-d H:i:s'),
-                'tgl_diambil' => date('Y-m-d H:i:s'),
-                'total_harga' => $data->diskon,
-                'dp' => $data->dp,
-                'bayar' => $data->dp,
-                'jenis_pembayaran' => $data->jenis_pembayaran,
-                'status' => $data->status,
-                'status_kerja' => 0,
-                'note' => $data->note,
-                'status_pesanan' => $data->status_pesanan,
-                'estimasi_waktu'=>  $data->estimasi_waktu,
-                'jml_transaksi' => 1,
-                'status_order' => 0,
-                'diskon' => 0,
-                'trash' => 0,
-            ]);
+            if (isset($request->id))
+            {
+                if (isset($data->pengerjaan_nota_id) && isset($data->pengerjaan_nota_nama))
+                {
+                    if (isset($data->diskon))
+                    {   
+                        Transaksi::create([
+                            'id' => $request->id,
+                            'owner_id' => $data->owner_id,							 
+                            'kios_id' => $data->id_kios,
+                            'pelanggan_id' => $data->id_pelanggan,
+                            'pengerjaan_nota_id' => $data->pengerjaan_nota_id,
+                            'pengerjaan_nota_nama' => $data->pengerjaan_nota_nama,
+                            'status_order' => $data->status_order,
+                            'tgl_transaksi' => date('Y-m-d H:i:s'),
+                            'tgl_masuk_uang' => date('Y-m-d H:i:s'),
+                            'tgl_diambil' => date('Y-m-d H:i:s'),
+                            'total_harga' => $diskon,
+                            'dp' => $data->dp,
+                            'bayar' => $data->dp,
+                            'jenis_pembayaran' => $data->jenis_pembayaran,
+                            'status' => $data->status,
+                            'note' => $data->note,
+                            'status_pesanan' => $data->status_pesanan,
+                            'estimasi_waktu'=>  $data->estimasi_waktu,
+                            'diskon' => $data->diskon,
+                            'jml_transaksi' => $finalCount							 
+                        ]);
+                        
+                        $total_harga = 1;
 
-            return $this->showOne($trans, 200);;
+                        foreach($data->order as $data_row){
+                            $data_input_item = [
+                                'transaksi_id' => $id,
+                                'harga_layanan_id' =>$data_row->id,
+                                'kuantitas' => $data_row->qty,
+                                'harga' => $data_row->harga,
+                            ];
+                            
+                            Item_Transaksi::create($data_input_item);
+                        }
+                    }
+                    else {
+                        $total_harga = 2;
+                    }
+                }
+                else {
+                    if (isset($data->diskon))
+                    {
+                        $total_harga = 3;
+                    }
+                    else {
+                        $total_harga = 4;
+                    }
+                }    
+            }
+            else 
+            {
+                if (isset($data->pengerjaan_nota_id) && isset($data->pengerjaan_nota_nama))
+                {
+                    if (isset($data->diskon))
+                    {
+                        $total_harga = 5;
+                    }
+                    else {
+                        $total_harga = 6;
+                    }
+                }
+                else {
+                    if (isset($data->diskon))
+                    {
+                        $total_harga = 7;
+                    }
+                    else {
+                        $total_harga = 8;
+                    }
+                }    
+            }
+
+            $output = [
+                'status' => true,
+                'pesan' => "sukses melakukan transaksi" ,
+                'data' => null,
+                'id' => $id,
+                'total_harga' => $total_harga
+            ];
+        
+            return response()->json($output, 200);
 
         } catch(\Exeception $exception) {
             return response()->json([
@@ -116,80 +146,6 @@ class TransaksiController extends Controller
                 'message' => "Error: Book not created!, please try again. - {$exception->getMessage()}"
             ], 500);
         }
-
-        // if (isset($data->id))
-        // {
-        //     if (isset($data->pengerjaan_nota_id) && isset($data->pengerjaan_nota_nama))
-        //     {
-        //         if (isset($data->diskon))
-        //         {                    
-        //             Transaksi::create($id, $data, $pengerjaan, $diskon);
-
-        //             $pelanggan = Pelanggan::find($data->id_pelanggan);
-        //             $pelanggan->jml_transaksi = $count + 1;
-        //             $pelanggan->save();
-
-        //             Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $count + 1]);
-
-        //             $total_harga = $diskon;
-
-        //             foreach($data->order as $data_row){
-        //                 $data_input_item = [
-        //                     'transaksi_id' => $id,
-        //                     'harga_layanan_id' =>$data_row->id,
-        //                     'kuantitas' => $data_row->qty,
-        //                     'harga' => $data_row->harga,
-        //                 ];
-                        
-        //                 Item_Transaksi::create($data_input_item);
-        //             }
-        //         }
-        //         else {
-        //             $trans = Transaksi::create($id, $data, $pengerjaan);
-        //         }
-        //     }
-        //     else {
-        //         if (isset($data->diskon))
-        //         {
-        //             $trans = Transaksi::create($id, $data, $diskon);
-        //         }
-        //         else {
-        //             $trans = Transaksi::create($id, $data);
-        //         }
-        //     }    
-        // }
-        // else 
-        // {
-        //     if (isset($data->pengerjaan_nota_id) && isset($data->pengerjaan_nota_nama))
-        //     {
-        //         if (isset($data->diskon))
-        //         {
-        //             $trans = Transaksi::create($data, $pengerjaan, $diskon);
-        //         }
-        //         else {
-        //             $trans = Transaksi::create($data, $pengerjaan);
-        //         }
-        //     }
-        //     else {
-        //         if (isset($data->diskon))
-        //         {
-        //             $trans = Transaksi::create($data, $diskon);
-        //         }
-        //         else {
-        //             $trans = Transaksi::create($data);
-        //         }
-        //     }    
-        // }
-
-        // $output = [
-        //     'status' => true,
-        //     'pesan' => "sukses melakukan transaksi" ,
-        //     'data' => null,
-        //     'id' => $id,
-        //     'total_harga' => $total_harga
-        // ];
-        
-        // return response()->json($output, 200);
         
     }
 
