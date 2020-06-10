@@ -18,8 +18,8 @@ class CreateTransaksiTable extends Migration
             $table->integer('owner_id');
             $table->integer('kios_id');
             $table->integer('pelanggan_id');
-            $table->integer('pengerjaan_nota_id');
-            $table->string('pengerjaan_nota_nama');
+            $table->integer('pengerjaan_nota_id')->nullable();
+            $table->string('pengerjaan_nota_nama')->nullable();
             $table->dateTime('tgl_transaksi');
             $table->dateTime('tgl_masuk_uang');
             $table->dateTime('tgl_diambil');

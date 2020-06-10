@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaksi extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'transaksi';
+
     protected $fillable = [
         'owner_id',
         'kios_id',

@@ -34,7 +34,7 @@ $factory->define(User::class, function (Faker $faker) {
         'jml_kios' => $faker->randomDigit,
         'pesan_antar' => $faker->randomElement([1, 0]),
         'saldo' => $faker->randomElement([$faker->randomNumber($nbDigits = 5), 0]),
-        'referral' => Str::random(6),
+        'reveral' => Str::random(6),
         'email_verified_at' => now(),
         'remember_token' => Str::random(10),
     ];
