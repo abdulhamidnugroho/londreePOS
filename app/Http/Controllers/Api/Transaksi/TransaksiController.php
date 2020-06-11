@@ -33,9 +33,13 @@ class TransaksiController extends Controller
      * @param  \Illuminate\Http\Request  $data
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Transaksi $transaksi, Item_Transaksi $item_transaksi, Pelanggan $pelanggan)
+    public function store(Request $request, Transaksi $transaksi, Item_Transaksi $item_transaksi)
     {
         $data = json_decode($request->data);
+
+        if (!$data){
+            return $this->errorResponse('Data Request tidak boleh kosong', 400);
+        }
 
         $id = $request->id;
         $kios = DB::table('kios')->where('id', $data->id_kios)->value('id_owner');
@@ -45,10 +49,6 @@ class TransaksiController extends Controller
 
         $count = Transaksi::where('pelanggan_id',$data->id_pelanggan)->count();
         $finalCount = $count + 1;
-
-        if (!$data){
-            return $this->errorResponse('JSON Data Request dan Token tidak boleh kosong', 400);
-        }
 
         try {
             if (isset($request->id))
@@ -79,7 +79,13 @@ class TransaksiController extends Controller
                             'diskon' => $data->diskon,
                             'jml_transaksi' => $finalCount							 
                         ]);
-                        
+
+                        $idPelanggan = $data->id_pelanggan;
+
+                        Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
+
+                        Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
+
                         $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
@@ -94,7 +100,45 @@ class TransaksiController extends Controller
                         }
                     }
                     else {
-                        $total_harga = 2;
+                        Transaksi::create([
+                            'id' => $request->id,
+                            'owner_id' => $data->owner_id,							 
+                            'kios_id' => $data->id_kios,
+                            'pelanggan_id' => $data->id_pelanggan,
+                            'pengerjaan_nota_id' => $data->pengerjaan_nota_id,
+                            'pengerjaan_nota_nama' => $data->pengerjaan_nota_nama,
+                            'status_order' => $data->status_order,
+                            'tgl_transaksi' => date('Y-m-d H:i:s'),
+                            'tgl_masuk_uang' => date('Y-m-d H:i:s'),
+                            'tgl_diambil' => date('Y-m-d H:i:s'),
+                            'total_harga' => $data->total,
+                            'dp' => $data->dp,
+                            'bayar' => $data->dp,
+                            'jenis_pembayaran' => $data->jenis_pembayaran,
+                            'status' => $data->status,
+                            'note' => $data->note,
+                            'status_pesanan' => $data->status_pesanan,
+                            'estimasi_waktu'=>  $data->estimasi_waktu,
+                            'diskon' => '',
+                            'jml_transaksi' => $finalCount							 
+                        ]);
+
+                        Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
+
+                        Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
+
+                        $total_harga = $data->total;
+
+                        foreach($data->order as $data_row){
+                            $data_input_item = [
+                                'transaksi_id' => $id,
+                                'harga_layanan_id' =>$data_row->id,
+                                'kuantitas' => $data_row->qty,
+                                'harga' => $data_row->harga,
+                            ];
+                            
+                            Item_Transaksi::create($data_input_item);
+                        }
                     }
                 }
                 else {
