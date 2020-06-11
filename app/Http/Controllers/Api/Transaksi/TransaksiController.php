@@ -36,14 +36,13 @@ class TransaksiController extends Controller
     public function store(Request $request, Transaksi $transaksi, Item_Transaksi $item_transaksi)
     {
         $data = json_decode($request->data);
-
+        
         if (!$data){
             return $this->errorResponse('Data Request tidak boleh kosong', 400);
         }
 
-        $id = $request->id;
         $kios = DB::table('kios')->where('id', $data->id_kios)->value('id_owner');
-        $diskon = $data->total - $data->diskon;
+        
         $count = Transaksi::where('pelanggan_id',$data->id_pelanggan)->count();
         $finalCount = $count + 1;
 
@@ -54,7 +53,8 @@ class TransaksiController extends Controller
                 {
                     if (isset($data->diskon))
                     {   
-                        Transaksi::create([
+                        $diskon = $data->total - $data->diskon;
+                        $trans = Transaksi::create([
                             'id' => $request->id,
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
@@ -77,27 +77,23 @@ class TransaksiController extends Controller
                             'jml_transaksi' => $finalCount							 
                         ]);
 
-                        $idPelanggan = $data->id_pelanggan;
-
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => $trans->id,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
                             ];
-                            
                             Item_Transaksi::create($data_input_item);
                         }
                     }
                     else {
-                        Transaksi::create([
+                        $trans = Transaksi::create([
                             'id' => $request->id,
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
@@ -126,7 +122,7 @@ class TransaksiController extends Controller
                         $total_harga = $data->total;
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => $trans->id,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -138,7 +134,8 @@ class TransaksiController extends Controller
                 else {
                     if (isset($data->diskon))
                     {
-                        Transaksi::create([
+                        $diskon = $data->total - $data->diskon;
+                        $trans = Transaksi::create([
                             'id' => $request->id,
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
@@ -161,17 +158,14 @@ class TransaksiController extends Controller
                             'jml_transaksi' => $finalCount							 
                         ]);
 
-                        $idPelanggan = $data->id_pelanggan;
-
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => $trans->id,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -181,7 +175,7 @@ class TransaksiController extends Controller
                         }
                     }
                     else {
-                        Transaksi::create([
+                        $trans = Transaksi::create([
                             'id' => $request->id,
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
@@ -205,14 +199,13 @@ class TransaksiController extends Controller
                         ]);
 
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $data->total;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => $trans->id,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -229,7 +222,8 @@ class TransaksiController extends Controller
                 {
                     if (isset($data->diskon))
                     {
-                        Transaksi::create([
+                        $diskon = $data->total - $data->diskon;
+                        $trans = Transaksi::create([
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
                             'pelanggan_id' => $data->id_pelanggan,
@@ -251,17 +245,14 @@ class TransaksiController extends Controller
                             'jml_transaksi' => $finalCount							 
                         ]);
 
-                        $idPelanggan = $data->id_pelanggan;
-
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => 5,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -271,7 +262,7 @@ class TransaksiController extends Controller
                         }
                     }
                     else {
-                        Transaksi::create([
+                        $trans = Transaksi::create([
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
                             'pelanggan_id' => $data->id_pelanggan,
@@ -299,7 +290,7 @@ class TransaksiController extends Controller
                         $total_harga = $data->total;
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => 6,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -311,7 +302,8 @@ class TransaksiController extends Controller
                 else {
                     if (isset($data->diskon))
                     {
-                        Transaksi::create([
+                        $diskon = $data->total - $data->diskon;
+                        $trans = Transaksi::create([
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
                             'pelanggan_id' => $data->id_pelanggan,
@@ -333,17 +325,14 @@ class TransaksiController extends Controller
                             'jml_transaksi' => $finalCount							 
                         ]);
 
-                        $idPelanggan = $data->id_pelanggan;
-
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $diskon;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => 7,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -353,7 +342,7 @@ class TransaksiController extends Controller
                         }
                     }
                     else {
-                        Transaksi::create([
+                        $trans = Transaksi::create([
                             'owner_id' => $data->owner_id,							 
                             'kios_id' => $data->id_kios,
                             'pelanggan_id' => $data->id_pelanggan,
@@ -374,16 +363,16 @@ class TransaksiController extends Controller
                             'diskon' => '',
                             'jml_transaksi' => $finalCount							 
                         ]);
-
+                        
+                        $this->$trans;
                         Transaksi::where('pelanggan_id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
-
                         Pelanggan::where('id', $data->id_pelanggan)->update(['jml_transaksi' => $finalCount]);
 
                         $total_harga = $data->total;
 
                         foreach($data->order as $data_row){
                             $data_input_item = [
-                                'transaksi_id' => $id,
+                                'transaksi_id' => 8,
                                 'harga_layanan_id' =>$data_row->id,
                                 'kuantitas' => $data_row->qty,
                                 'harga' => $data_row->harga,
@@ -399,7 +388,7 @@ class TransaksiController extends Controller
                 'status' => true,
                 'pesan' => "Sukses melakukan transaksi" ,
                 'data' => null,
-                'id' => $id,
+                'id' => $trans->id,
                 'total_harga' => $total_harga
             ];
         
