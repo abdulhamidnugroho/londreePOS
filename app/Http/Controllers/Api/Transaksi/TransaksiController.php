@@ -36,7 +36,7 @@ class TransaksiController extends Controller
     public function store(Request $request, Transaksi $transaksi, Item_Transaksi $item_transaksi)
     {
         $data = json_decode($request->data);
-        
+        dd($data);
         if (!$data){
             return $this->errorResponse('Data Request tidak boleh kosong', 400);
         }
@@ -402,6 +402,36 @@ class TransaksiController extends Controller
         }
         
     }
+
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $data
+     * @return \Illuminate\Http\Response
+     */
+    public function order(Request $request)
+    {
+        $data = $request->all();
+        $data['password'] = bcrypt($request->password);
+        $data['verified'] = User::UNVERIFIED_USER;
+        $data['verification_token'] = User::generateVerificationCode();
+        $data['admin'] = User::REGULAR_USER;
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'password_confirmation' => $request->password_confirmation,
+            'verified' => User::UNVERIFIED_USER,
+            'verification' => User::generateVerificationCode(),
+            'admin' => User::REGULAR_USER
+        ];
+        dd($data);
+        $user = User::create($data);
+
+        return $this->showOne($user, 201);
+    }
+
 
     /**
      * Display the specified resource.
