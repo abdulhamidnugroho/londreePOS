@@ -31,18 +31,19 @@ class LoginController extends Controller
         }
         
         // Use this, if there is MD5 password used
-        $user = User::where([ 
+        $user = User::where([
             'email' => $request->email,
             'password' => md5($request->password)
         ])->first();
 
         if ($user) {
+            $user->password = bcrypt($request->password);
+            $user->save();
+
             $this->guard()->login($user);
 
-            return redirect('other/path');;
+            return redirect('hello');;
         }
-
-        return redirect('fail-path-with-instructions-for-create-account');
 
         return $this->respondWithToken($token);
     }
