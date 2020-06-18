@@ -1,7 +1,7 @@
 {
-  "name": "tony133/laravel-api-boilerplate-jwt-book",
+  "name": "LondreePOS-Laravel",
   "type": "project",
-  "description": "Simple Example Api Rest Book with Laravel 7.x and Json Web Token",
+  "description": "LondreePOS-Laravel API",
   "keywords": [
     "framework",
     "laravel"
