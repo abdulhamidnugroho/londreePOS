@@ -23,12 +23,12 @@ class LoginController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'User not found'
-            ], 401);
-        }
+        // if (!$token = JWTAuth::attempt($credentials)) {
+        //     return response()->json([
+        //         'error' => 'Unauthorized',
+        //         'message' => 'User not found'
+        //     ], 401);
+        // }
         
         // Use this, if there is MD5 password used
         $user = User::where([
