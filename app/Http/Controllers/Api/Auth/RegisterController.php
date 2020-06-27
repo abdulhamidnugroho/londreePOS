@@ -21,12 +21,13 @@ class RegisterController extends Controller
         try {
 
             $user = User::insert([
-                'nama' => $request->name,
+                'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'type' => $request->type,
                 'trash' => $request->trash,
                 'id_owner' => $request->id_owner,
+                'active_until' => $request->active_until,
                 'activation_code' => rand(100000, 999999),
                 'fcm_token' => Str::random(152),
                 'reveral' => Str::random(6),

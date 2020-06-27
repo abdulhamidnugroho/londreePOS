@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('telp')->unique()->nullable();
             $table->string('alamat', 100)->nullable();
             $table->string('password');
+            $table->dateTime('active_until');
             $table->string('type');
             $table->integer('id_owner')->nullable();
             $table->text('activation_code')->nullable();
