@@ -19,7 +19,7 @@ trait ResponseApiToken
         $id_owner = Auth::user()->id_owner;
         $type = Auth::user()->type;
         $id_kios = DB::table('operator_kios')->where('admin_id', $id_owner)->value('kios_id');
-        $data_user = DB::table('users')->where('id', $id )->first();
+        $data_user = DB::table('admin')->where('id', $id )->first();
         
         if ($type == 'admin')
         {
