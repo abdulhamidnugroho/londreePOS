@@ -26,6 +26,11 @@ Route::group(['middleware' => 'api'], function($router) {
     });
 });
 
+Route::group(['middleware' => 'api', 'prefix' => 'register'], function ($router) {
+    Route::post('/tambahowner', 'Api\Auth\RegisterController@tambahowner')->name('api.register.tambahowner');
+    Route::post('/tambahkios', 'Api\Auth\RegisterController@tambahkios')->name('api.register.tambahkios');;
+});
+
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('/login', 'Api\Auth\LoginController@store')->name('api.auth.login');
     Route::post('/register', 'Api\Auth\RegisterController@store')->name('api.auth.register');
@@ -47,6 +52,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 		});
     });
 });
+
+
 
 Route::group(['middleware' => 'jwt.auth'], function ($router) {
     Route::apiResource('books', 'Api\Books\BooksController');

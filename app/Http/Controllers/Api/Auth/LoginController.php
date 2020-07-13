@@ -24,7 +24,7 @@ class LoginController extends Controller
     {
         // Cek jika password masih pakai hash md5 
         $user = User::where('email', '=', $request->email)->first();
-
+        // dd($user->password);
         if (md5(md5($request->password)) == $user->password)
         {
             // Update password ke bcrypt

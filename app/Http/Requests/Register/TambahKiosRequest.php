@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Register;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class TambahKiosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,12 @@ class RegisterRequest extends FormRequest
     {
         return [
             'nama' => 'required',
-            'email' => 'required|email|unique:admin',
-            'telp' => 'required|unique:admin',
-            'password' => 'required'
+            'alamat' => 'required|',
+            'no_telp' => 'required|unique:admin',
+            'id_owner' => 'required'
         ];
     }
-    
+
     /**
      * Custom message for validation
      *
@@ -40,9 +40,9 @@ class RegisterRequest extends FormRequest
 	{
 		return [
             'nama.required' => 'Nama harus diisi',
-            'email.required' => 'Email harus diisi',
-            'email.unique:admin' => 'Email sudah terpakai',
-            'password.required' => 'Password harus diisi'
+            'alamat.required' => 'Alamat harus diisi',
+            'no_telp.unique:admin' => 'No Telepon sudah terpakai',
+            'id_owner' => 'required'
 		];
 	}
 }

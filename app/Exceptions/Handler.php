@@ -60,6 +60,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ValidationException)
+        {
+            return $this->convertValidationExceptionToResponse($exception, $request);
+        }
+        
         if ($exception instanceof MethodNotAllowedHttpException) {
             abort(JsonResponse::HTTP_METHOD_NOT_ALLOWED, 'Method not allowed');
         }
