@@ -91,17 +91,18 @@ class RegisterController extends Controller
      */
     public function tambahkios(TambahKiosRequest $request)
     {   
-        dd($request->all());
+        
         try {
             $kios = Kios::insert([
                 'nama' => $request->nama, 
                 'alamat' => $request->alamat,
-                'telp' => $request->no_telp,
+                'no_telp' => $request->no_telp,
                 'latitude' => $request->latitude,
                 'id_owner' => 1086,
                 'pesan_antar' => $request->pesan_antar,
                 'ketentuan' => $request->ketentuan,
                 'estimasi' => $request->estimasi,
+                'pesan_wa_sms' => '',
                 ]);
                 
         } catch (\Exception $exception) {

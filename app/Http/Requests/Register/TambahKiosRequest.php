@@ -25,8 +25,8 @@ class TambahKiosRequest extends FormRequest
     {
         return [
             'nama' => 'required',
-            'alamat' => 'required|',
-            'no_telp' => 'required|unique:admin',
+            'alamat' => 'required',
+            'no_telp' => 'required|unique:kios',
             'id_owner' => 'required'
         ];
     }
@@ -41,7 +41,7 @@ class TambahKiosRequest extends FormRequest
 		return [
             'nama.required' => 'Nama harus diisi',
             'alamat.required' => 'Alamat harus diisi',
-            'no_telp.unique:admin' => 'No Telepon sudah terpakai',
+            'no_telp.unique:kios' => 'No Telepon sudah terpakai',
             'id_owner' => 'required'
 		];
 	}
