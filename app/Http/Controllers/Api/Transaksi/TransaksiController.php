@@ -36,7 +36,7 @@ class TransaksiController extends Controller
     public function store(Request $request, Transaksi $transaksi, Item_Transaksi $item_transaksi)
     {
         $data = json_decode($request->data);
-        dd($data);
+        
         if (!$data){
             return $this->errorResponse('Data Request tidak boleh kosong', 400);
         }
