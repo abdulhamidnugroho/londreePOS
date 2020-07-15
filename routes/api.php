@@ -28,7 +28,8 @@ Route::group(['middleware' => 'api'], function($router) {
 
 Route::group(['middleware' => 'api', 'prefix' => 'register'], function ($router) {
     Route::post('/tambahowner', 'Api\Auth\RegisterController@tambahowner')->name('api.register.tambahowner');
-    Route::post('/tambahkios', 'Api\Auth\RegisterController@tambahkios')->name('api.register.tambahkios');;
+    Route::post('/tambahkios', 'Api\Auth\RegisterController@tambahkios')->name('api.register.tambahkios');
+    Route::post('/tambahoperatorkios', 'Api\Auth\RegisterController@tambahoperatorkios')->name('api.register.tambahoperator');;
 });
 
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
