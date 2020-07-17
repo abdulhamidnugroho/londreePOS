@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\API\Pelanggan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Pelanggan\TambahPelangganRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\ApiResponser;
+use App\Pelanggan;
+use App\Pelanggan_Kios;
+use Illuminate\Support\Facades\Auth;
 
 class PelangganController extends Controller
 {
@@ -52,9 +56,56 @@ class PelangganController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function tambahpelanggan(TambahPelangganRequest $request)
     {
-        //
+        if ($request->password){
+            $password = bcrypt($request->password);
+        } else {
+            $password = bcrypt('12345');
+        }
+
+        // if  (isset($request->email) AND isset($request->telepon)){
+        //     $message = '(dengan data email & telepon)';
+        // } else if (isset($request->email)){
+        //     $message = '(dengan data email)';
+        // } else if (isset($request->telepon)){
+        //     $message = '(dengan data telepon)';
+        // } else if (!$request->email || !$request->telepon){
+        //     $message = '(tanpa data email & telepon';
+        // }
+        // dd($request->all());
+        try {
+            $pelanggan = Pelanggan::insert([
+                'admin_id' => Auth::user()->id,
+                'nama' => $request->nama, 
+                'alamat' => $request->alamat,
+                'email' => $request->email,
+                'telepon' => $request->telepon,
+                'password' => bcrypt($request->password),
+                'saldo_dompet' => 0,
+                'last_update' => date("Y-m-d H:i:s"),
+            ]);
+
+            $id = DB::getPdo()->lastInsertId();
+
+            $pelanggan_kios = Pelanggan_Kios::insert([
+                'owner_id' => Auth::user()->id,
+                'pelanggan_id' => $id
+            ]);
+
+            $data = DB::table('pelanggan')->where('id', $id)->first();
+
+        } catch(\Exeception $exception) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Error: Gagal menambah pelanggan. - {$exception->getMessage()}"
+            ], 500);
+        }
+
+        return response([
+            'status' => 'sukses menambah pelanggan',
+            'data' => $data
+        ], 200);
     }
 
     /**

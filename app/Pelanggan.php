@@ -15,7 +15,12 @@ class Pelanggan extends Model
 
     protected $fillable = [
         'admin_id',
+        'nama',
+        'alamat',
+        'email',
+        'telepon',
         'jml_transaksi',
-        'nama'
+        'password',
+        'saldo_dompet'
     ];
 }

@@ -16,7 +16,7 @@ class CreatePelangganTable extends Migration
         Schema::create('pelanggan', function (Blueprint $table) {
             $table->id();
             $table->integer('admin_id');
-            $table->string('title');
+            $table->string('title')->default('Sdr');
             $table->string('nama');
             $table->string('email');
             $table->string('telepon');
