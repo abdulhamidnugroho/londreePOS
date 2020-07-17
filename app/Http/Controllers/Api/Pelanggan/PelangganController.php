@@ -64,16 +64,16 @@ class PelangganController extends Controller
             $password = bcrypt('12345');
         }
 
-        // if  (isset($request->email) AND isset($request->telepon)){
-        //     $message = '(dengan data email & telepon)';
-        // } else if (isset($request->email)){
-        //     $message = '(dengan data email)';
-        // } else if (isset($request->telepon)){
-        //     $message = '(dengan data telepon)';
-        // } else if (!$request->email || !$request->telepon){
-        //     $message = '(tanpa data email & telepon';
-        // }
-        // dd($request->all());
+        if  (isset($request->email) AND isset($request->telepon)){
+            $message = '(dengan data email & telepon)';
+        } else if (isset($request->email)){
+            $message = '(dengan data email)';
+        } else if (isset($request->telepon)){
+            $message = '(dengan data telepon)';
+        } else if (!$request->email || !$request->telepon){
+            $message = '(tanpa data email & telepon';
+        }
+
         try {
             $pelanggan = Pelanggan::insert([
                 'admin_id' => Auth::user()->id,
@@ -103,7 +103,7 @@ class PelangganController extends Controller
         }
 
         return response([
-            'status' => 'sukses menambah pelanggan',
+            'status' => 'sukses menambah pelanggan'. $message,
             'data' => $data
         ], 200);
     }
