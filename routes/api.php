@@ -54,9 +54,12 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     });
 });
 
+Route::group(['middleware' => 'jwt.auth', 'prefix' => 'kios'], function ($router) {
+    Route::get('/listkios', 'Api\Kios\KiosController@listkios')->name('api.kios.listkios');
+});
+
 Route::group(['middleware' => 'jwt.auth', 'prefix' => 'pelanggan'], function ($router) {
     Route::post('/listpelanggan', 'Api\Pelanggan\PelangganController@listpelanggan')->name('api.pelanggan.listpelanggan');
-    Route::post('/tambahpelanggan', 'Api\Pelanggan\PelangganController@tambahpelanggan')->name('api.pelanggan.tambahpelanggan');
 });
 
 Route::group(['middleware' => 'jwt.auth'], function ($router) {

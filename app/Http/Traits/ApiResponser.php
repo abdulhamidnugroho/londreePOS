@@ -13,6 +13,12 @@ trait ApiResponser
 {
     private function successResponse($data, $code)
     {
+        $data = [
+            'status' => true,
+            'pesan' => 'sukses',
+            'data' => $data,
+        ];
+
         return response()->json($data, $code);
     }
 

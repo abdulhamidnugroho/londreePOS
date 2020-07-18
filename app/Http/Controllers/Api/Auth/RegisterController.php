@@ -127,7 +127,6 @@ class RegisterController extends Controller
      */
     public function tambahoperatorkios(TambahOperatorRequest $request)
     {   
-        // dd($request->all());
         try {
             $kios = User::insert([
                 'type' => 'operator',

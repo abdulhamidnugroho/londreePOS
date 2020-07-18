@@ -10,6 +10,7 @@ use App\Http\Traits\ApiResponser;
 use App\Pelanggan;
 use App\Pelanggan_Kios;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PelangganController extends Controller
 {
@@ -71,12 +72,12 @@ class PelangganController extends Controller
         } else if (isset($request->telepon)){
             $message = '(dengan data telepon)';
         } else if (!$request->email || !$request->telepon){
-            $message = '(tanpa data email & telepon';
+            $message = '(tanpa data email & telepon)';
         }
 
         try {
             $pelanggan = Pelanggan::insert([
-                'admin_id' => Auth::user()->id,
+                'admin_id' => JWTAuth::user()->id,
                 'nama' => $request->nama, 
                 'alamat' => $request->alamat,
                 'email' => $request->email,
